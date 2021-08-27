@@ -61,6 +61,13 @@ func (m *Map) Add(k interface{}, v interface{}) {
 		m.locker.Unlock()
 	}()
 
+	h, ok := m.m[k]
+	if ok {
+		h.v = v
+		h.last = time.Now().UnixNano()
+		return
+	}
+
 	sort.Sort(m.vidx)
 
 	oldest := time.Now().Add(-m.maxage)
@@ -95,6 +102,19 @@ func (m *Map) Add(k interface{}, v interface{}) {
 }
 
 func (m *Map) Lookup(k interface{}) (v interface{}, ok bool) {
+	m.locker.RLock()
+	defer func() {
+		m.locker.RUnlock()
+	}()
+
+	h, ok := m.m[k]
+	if ok {
+		v = h.v
+	}
+	return v, ok
+}
+
+func (m *Map) LookupAndTouch(k interface{}) (v interface{}, ok bool) {
 	m.locker.RLock()
 	defer func() {
 		m.locker.RUnlock()

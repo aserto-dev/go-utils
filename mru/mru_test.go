@@ -20,11 +20,13 @@ func TestAddLookup(t *testing.T) {
 	_, ok = m.Lookup("three")
 	assert.True(t, ok)
 
+	_, ok = m.LookupAndTouch("one")
+	assert.True(t, ok)
 	m.Add("four", 4)
 	_, ok = m.Lookup("one")
-	assert.False(t, ok)
-	_, ok = m.Lookup("two")
 	assert.True(t, ok)
+	_, ok = m.Lookup("two")
+	assert.False(t, ok)
 	_, ok = m.Lookup("three")
 	assert.True(t, ok)
 	_, ok = m.Lookup("four")
@@ -32,6 +34,7 @@ func TestAddLookup(t *testing.T) {
 
 	m.maxage = time.Duration(time.Second * 0)
 	m.Add("five", 5)
+	m.Add("five", "five")
 	_, ok = m.Lookup("one")
 	assert.False(t, ok)
 	_, ok = m.Lookup("two")
@@ -40,6 +43,7 @@ func TestAddLookup(t *testing.T) {
 	assert.False(t, ok)
 	_, ok = m.Lookup("four")
 	assert.False(t, ok)
-	_, ok = m.Lookup("five")
+	v, ok = m.Lookup("five")
 	assert.True(t, ok)
+	assert.Equal(t, v, "five")
 }
