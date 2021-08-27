@@ -8,7 +8,7 @@ import (
 )
 
 func TestAddLookup(t *testing.T) {
-	m := NewMRUMap(3, time.Duration(time.Second*3600))
+	m := NewMap(3, time.Duration(time.Second*3600))
 	m.Add("one", 1)
 	m.Add("two", 2)
 	m.Add("three", 3)
