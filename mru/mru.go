@@ -33,7 +33,7 @@ func (hs holders) Swap(i, j int) {
 	hs[j] = t
 }
 
-type MRUMap struct {
+type Map struct {
 	m      map[interface{}]*holder
 	idx    holders
 	vidx   holders
@@ -41,13 +41,13 @@ type MRUMap struct {
 	maxage time.Duration
 }
 
-func NewMRUMap(cap int, maxage time.Duration) *MRUMap {
+func NewMap(cap int, maxage time.Duration) *Map {
 	if !(cap > 0) {
 		panic("capacity must be greater than zero")
 	}
 
 	idx := make(holders, cap)
-	return &MRUMap{
+	return &Map{
 		m:      map[interface{}]*holder{},
 		idx:    make(holders, cap),
 		vidx:   idx[0:0],
@@ -55,7 +55,7 @@ func NewMRUMap(cap int, maxage time.Duration) *MRUMap {
 	}
 }
 
-func (m *MRUMap) Add(k interface{}, v interface{}) {
+func (m *Map) Add(k interface{}, v interface{}) {
 	m.locker.Lock()
 	defer func() {
 		m.locker.Unlock()
@@ -94,7 +94,7 @@ func (m *MRUMap) Add(k interface{}, v interface{}) {
 	m.vidx[len(m.vidx)-1] = newHolder
 }
 
-func (m *MRUMap) Lookup(k interface{}) (v interface{}, ok bool) {
+func (m *Map) Lookup(k interface{}) (v interface{}, ok bool) {
 	m.locker.RLock()
 	defer func() {
 		m.locker.RUnlock()
