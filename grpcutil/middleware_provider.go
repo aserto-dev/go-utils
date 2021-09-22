@@ -12,12 +12,12 @@ type Middleware interface {
 
 type Middlewares []Middleware
 
-func (m Middlewares) AsGRPCOptions() []grpc.ServerOption {
+func (m Middlewares) AsGRPCOptions() (grpc.ServerOption, grpc.ServerOption) {
 	unaryInterceptors := []grpc.UnaryServerInterceptor{}
 	streamInterceptors := []grpc.StreamServerInterceptor{}
 
 	for _, middleware := range m {
-		if m == nil {
+		if middleware == nil {
 			continue
 		}
 
@@ -33,8 +33,6 @@ func (m Middlewares) AsGRPCOptions() []grpc.ServerOption {
 		}
 	}
 
-	return []grpc.ServerOption{
-		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(unaryInterceptors...)),
-		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(streamInterceptors...)),
-	}
+	return grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(unaryInterceptors...)),
+		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(streamInterceptors...))
 }
