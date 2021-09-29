@@ -17,9 +17,9 @@ import (
 
 // Config represents logging configuration
 type Config struct {
-	Prod           bool          `mapstructure:"prod"`
-	LogLevelParsed zerolog.Level `mapstructure:"-"`
-	LogLevel       string        `mapstructure:"log_level"`
+	Prod           bool          `json:"prod"`
+	LogLevelParsed zerolog.Level `json:"-"`
+	LogLevel       string        `json:"log_level"`
 }
 
 // ParseLogLevel parses the log level in the config and
