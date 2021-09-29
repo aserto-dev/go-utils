@@ -8,6 +8,7 @@ import (
 
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -282,4 +283,8 @@ func (e *AsertoError) Cause() error {
 func (e *AsertoError) MarshalZerologObject(event *zerolog.Event) {
 	event.Str("error", e.Error())
 	event.Fields(e.Fields())
+}
+
+func (e *AsertoError) GRPCStatus() *status.Status {
+	return status.New(e.StatusCode, e.Message)
 }
