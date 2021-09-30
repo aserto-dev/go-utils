@@ -12,9 +12,9 @@ import (
 
 // TLSCredsConfig contains paths to certificates
 type TLSCredsConfig struct {
-	TLSCertPath   string `mapstructure:"tls_cert_path"`
-	TLSKeyPath    string `mapstructure:"tls_key_path"`
-	TLSCACertPath string `mapstructure:"tls_ca_cert_path"`
+	TLSCertPath   string `json:"tls_cert_path"`
+	TLSKeyPath    string `json:"tls_key_path"`
+	TLSCACertPath string `json:"tls_ca_cert_path"`
 }
 
 // GRPCServerTLSCreds gets TLS credentials for a GRPC server
