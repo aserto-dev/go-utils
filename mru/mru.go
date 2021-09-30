@@ -1,7 +1,11 @@
-// This package implements a synchronized MRU (most recently used) map. Its a map that will hold at most cap key/value pairs
-// and will evict entries if: 1) adding an element would exceed cap, in this case the oldest existing element is removed to
-// make space for a new one. 2) an element's age exceeds maxage, the check is done when adding elements.
-// Age is defined as the duration between now and the time the element was last accessed (added or looked up).
+// This package implements a synchronized, MRU (most recently used) map. Its a map that holds at most cap key/value pairs
+// Entries are evicted entries if:
+//   1) adding an element would exceed cap, in this case the oldest existing element is removed to
+//   make space for a new one.
+//   2) an element's age exceeds maxage, the check is done when adding elements.
+// Age is defined as the duration between now and the time the element was last accessed (added and/or looked up depending on
+// on which Lookup settings are used).
+
 package mru
 
 import (
@@ -101,29 +105,19 @@ func (m *Map) Add(k interface{}, v interface{}) {
 	m.vidx[len(m.vidx)-1] = newHolder
 }
 
-func (m *Map) Lookup(k interface{}) (v interface{}, ok bool) {
+func (m *Map) Lookup(k interface{}, withAging, touch bool) (interface{}, bool) {
 	m.locker.RLock()
 	defer func() {
 		m.locker.RUnlock()
 	}()
 
+	oldest := time.Now().Add(-m.maxage)
 	h, ok := m.m[k]
-	if ok {
-		v = h.v
+	if ok && (!withAging || h.last > oldest.UnixNano()) {
+		if touch {
+			_ = atomic.SwapInt64(&h.last, time.Now().UnixNano())
+		}
+		return h.v, true
 	}
-	return v, ok
-}
-
-func (m *Map) LookupAndTouch(k interface{}) (v interface{}, ok bool) {
-	m.locker.RLock()
-	defer func() {
-		m.locker.RUnlock()
-	}()
-
-	h, ok := m.m[k]
-	if ok {
-		v = h.v
-		_ = atomic.SwapInt64(&h.last, time.Now().UnixNano())
-	}
-	return v, ok
+	return nil, false
 }
