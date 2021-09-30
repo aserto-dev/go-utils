@@ -1,5 +1,5 @@
 // This package implements a synchronized, MRU (most recently used) map. Its a map that holds at most cap key/value pairs
-// Entries are evicted entries if:
+// Entries are evicted if:
 //   1) adding an element would exceed cap, in this case the oldest existing element is removed to
 //   make space for a new one.
 //   2) an element's age exceeds maxage, the check is done when adding elements.
