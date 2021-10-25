@@ -98,6 +98,8 @@ var (
 	ErrInvalidArgument = newErr("E10039", codes.InvalidArgument, "invalid argument")
 	// Returned when the caller is trying to update a readonly value
 	ErrReadOnly = newErr("E10040", codes.InvalidArgument, "readonly")
+	// Returned when the caller tries to create or update a policy with a name that already exists
+	ErrDuplicatePolicyName = newErr("E10041", codes.InvalidArgument, "policy name already exists")
 )
 
 func newErr(code string, statusCode codes.Code, msg string) *AsertoError {
