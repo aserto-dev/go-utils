@@ -100,6 +100,8 @@ var (
 	ErrReadOnly = newErr("E10040", codes.InvalidArgument, "readonly")
 	// Returned when the caller tries to create or update a policy with a name that already exists
 	ErrDuplicatePolicyName = newErr("E10041", codes.InvalidArgument, "policy name already exists")
+	// Returned when the caller tries to create or update a connection with a name that already exists
+	ErrDuplicateConnectionName = newErr("E10042", codes.InvalidArgument, "connection name already exists")
 )
 
 func newErr(code string, statusCode codes.Code, msg string) *AsertoError {
