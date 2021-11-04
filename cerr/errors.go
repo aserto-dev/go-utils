@@ -1,6 +1,7 @@
 package cerr
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -146,6 +147,7 @@ func (e *AsertoError) Copy() *AsertoError {
 		Message:    e.Message,
 		Data:       dataCopy,
 		errs:       e.errs,
+		HttpCode:   e.HttpCode,
 	}
 }
 
@@ -307,4 +309,18 @@ func (e *AsertoError) WithHTTPStatus(httpStatus int) *AsertoError {
 	c := e.Copy()
 	c.HttpCode = httpStatus
 	return c
+}
+
+func UnwrapAsertoError(err error) *AsertoError {
+	for {
+		aErr, ok := err.(*AsertoError)
+		if ok {
+			return aErr
+		}
+
+		err = errors.Unwrap(err)
+		if err == nil {
+			return nil
+		}
+	}
 }
