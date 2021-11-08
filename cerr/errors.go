@@ -1,8 +1,10 @@
 package cerr
 
 import (
+	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"strings"
 	"time"
 
@@ -17,95 +19,97 @@ const (
 
 var (
 	// Unknown error ID. It's returned when the implementation has not returned another AsertoError.
-	ErrUnknown = newErr("E10000", codes.Internal, "an unknown error has occurred")
+	ErrUnknown = newErr("E10000", codes.Internal, http.StatusInternalServerError, "an unknown error has occurred")
 	// Means no tenant id was found in the current context
-	ErrNoTenantID = newErr("E10001", codes.InvalidArgument, "no tenant id specified")
+	ErrNoTenantID = newErr("E10001", codes.InvalidArgument, http.StatusBadRequest, "no tenant id specified")
 	// Means the tenant id is not valid
-	ErrInvalidTenantID = newErr("E10002", codes.InvalidArgument, "invalid tenant id")
+	ErrInvalidTenantID = newErr("E10002", codes.InvalidArgument, http.StatusBadRequest, "invalid tenant id")
 	// Means the tenant name doesn't conform to our tenant name rules
-	ErrInvalidTenantName = newErr("E10003", codes.InvalidArgument, "invalid tenant name")
+	ErrInvalidTenantName = newErr("E10003", codes.InvalidArgument, http.StatusBadRequest, "invalid tenant name")
 	// Means the provider ID is invalid
-	ErrInvalidProviderID = newErr("E10004", codes.InvalidArgument, "invalid provider id")
+	ErrInvalidProviderID = newErr("E10004", codes.InvalidArgument, http.StatusBadRequest, "invalid provider id")
 	// Means the provider config name doesn't exist
-	ErrInvalidProviderConfigName = newErr("E10005", codes.InvalidArgument, "invalid provider config name")
+	ErrInvalidProviderConfigName = newErr("E10005", codes.InvalidArgument, http.StatusBadRequest, "invalid provider config name")
 	// The asked-for runtime is not yet available, but will likely be in the future.
-	ErrRuntimeLoading = newErr("E10006", codes.Unavailable, "runtime has not yet loaded")
+	ErrRuntimeLoading = newErr("E10006", codes.Unavailable, http.StatusTooEarly, "runtime has not yet loaded")
 	// Means a connection failed to validate.
-	ErrConnectionVerification = newErr("E10007", codes.FailedPrecondition, "connection verification failed")
+	ErrConnectionVerification = newErr("E10007", codes.FailedPrecondition, http.StatusServiceUnavailable, "connection verification failed")
 	// Returned when there's a problem retrieving a connection.
-	ErrConnection = newErr("E10008", codes.Unavailable, "connection problem")
+	ErrConnection = newErr("E10008", codes.Unavailable, http.StatusServiceUnavailable, "connection problem")
 	// Returned when there's a problem getting a github access token.
-	ErrGithubAccessToken = newErr("E10009", codes.Unavailable, "failed to retrieve github access token")
+	ErrGithubAccessToken = newErr("E10009", codes.Unavailable, http.StatusServiceUnavailable, "failed to retrieve github access token")
 	// Returned when there's a problem communicating with an SCC provider such as Github.
-	ErrSCC = newErr("E10010", codes.Unavailable, "there was an error interacting with the source code provider")
+	ErrSCC = newErr("E10010", codes.Unavailable, http.StatusServiceUnavailable, "there was an error interacting with the source code provider")
 	// Means a provided connection ID was not found in the database.
-	ErrConnectionNotFound = newErr("E10011", codes.NotFound, "connection not found")
+	ErrConnectionNotFound = newErr("E10011", codes.NotFound, http.StatusNotFound, "connection not found")
 	// Returned if an account id is not found in the database
-	ErrAccountNotFound = newErr("E10012", codes.NotFound, "account not found")
+	ErrAccountNotFound = newErr("E10012", codes.NotFound, http.StatusNotFound, "account not found")
 	// Returned if an account id is not valid
-	ErrInvalidAccountID = newErr("E10013", codes.InvalidArgument, "invalid account id")
+	ErrInvalidAccountID = newErr("E10013", codes.InvalidArgument, http.StatusBadRequest, "invalid account id")
 	// Returned if a policy id is not found in the database
-	ErrPolicyNotFound = newErr("E10014", codes.NotFound, "policy not found")
+	ErrPolicyNotFound = newErr("E10014", codes.NotFound, http.StatusNotFound, "policy not found")
 	// Returned when there's a problem with one of the system connections
-	ErrSystemConnection = newErr("E10015", codes.Internal, "system connection problem")
+	ErrSystemConnection = newErr("E10015", codes.Internal, http.StatusInternalServerError, "system connection problem")
 	// Returned if a policy id is invalid
-	ErrInvalidPolicyID = newErr("E10016", codes.InvalidArgument, "invalid policy id")
+	ErrInvalidPolicyID = newErr("E10016", codes.InvalidArgument, http.StatusBadRequest, "invalid policy id")
 	// Returned when there's a problem with a connection's secret
-	ErrConnectionSecret = newErr("E10017", codes.Unavailable, "connection secret error")
+	ErrConnectionSecret = newErr("E10017", codes.Unavailable, http.StatusInternalServerError, "connection secret error")
 	// Returned when an invite for an email already exists
-	ErrInviteExists = newErr("E10018", codes.AlreadyExists, "invite already exists")
+	ErrInviteExists = newErr("E10018", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite already exists")
 	// Returned when an invitation has expired
-	ErrInviteExpired = newErr("E10019", codes.AlreadyExists, "invite is expired")
+	ErrInviteExpired = newErr("E10019", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite is expired")
 	// Means an existing member of a tenant was invited to join the same tenant
-	ErrAlreadyMember = newErr("E10020", codes.AlreadyExists, "already a tenant member")
+	ErrAlreadyMember = newErr("E10020", codes.AlreadyExists, http.StatusUnprocessableEntity, "already a tenant member")
 	// Returned if an account tried to accept or decline the invite of another account
-	ErrInviteForAnotherUser = newErr("E10021", codes.PermissionDenied, "invite meant for another user")
+	ErrInviteForAnotherUser = newErr("E10021", codes.PermissionDenied, http.StatusForbidden, "invite meant for another user")
 	// Returned if an SCC repository has already been referenced in a policy
-	ErrRepoAlreadyConnected = newErr("E10022", codes.AlreadyExists, "repo has already been connected to a policy")
+	ErrRepoAlreadyConnected = newErr("E10022", codes.AlreadyExists, http.StatusUnprocessableEntity, "repo has already been connected to a policy")
 	// Returned if there was a problem setting up a Github secret
-	ErrGithubSecret = newErr("E10023", codes.Unavailable, "failed to setup repo secret")
+	ErrGithubSecret = newErr("E10023", codes.Unavailable, http.StatusServiceUnavailable, "failed to setup repo secret")
 	// Returned if there was a problem setting up an Auth0 user
-	ErrAuth0UserSetup = newErr("E10024", codes.Unavailable, "failed to setup user")
+	ErrAuth0UserSetup = newErr("E10024", codes.Unavailable, http.StatusServiceUnavailable, "failed to setup user")
 	// Returned if an invalid email address was used
-	ErrInvalidEmail = newErr("E10025", codes.InvalidArgument, "invalid email address")
+	ErrInvalidEmail = newErr("E10025", codes.InvalidArgument, http.StatusBadRequest, "invalid email address")
 	// Returned if a string doesn't look like an auth0 ID
-	ErrInvalidAuth0ID = newErr("E10026", codes.InvalidArgument, "invalid auth0 ID")
+	ErrInvalidAuth0ID = newErr("E10026", codes.InvalidArgument, http.StatusBadRequest, "invalid auth0 ID")
 	// Returned when an invitation has been accepted
-	ErrInviteAlreadyAccepted = newErr("E10027", codes.AlreadyExists, "invite has already been accepted")
+	ErrInviteAlreadyAccepted = newErr("E10027", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite has already been accepted")
 	// Returned when an invitation has been declined
-	ErrInviteAlreadyDeclined = newErr("E10028", codes.AlreadyExists, "invite has already been declined")
+	ErrInviteAlreadyDeclined = newErr("E10028", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite has already been declined")
 	// Returned when an invitation has been canceled
-	ErrInviteCanceled = newErr("E10029", codes.AlreadyExists, "invite has been canceled")
+	ErrInviteCanceled = newErr("E10029", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite has been canceled")
 	// Returned when a provider verification call has failed
-	ErrProviderVerification = newErr("E10030", codes.InvalidArgument, "verification failed")
+	ErrProviderVerification = newErr("E10030", codes.InvalidArgument, http.StatusBadRequest, "verification failed")
 	// Means an account already exists for the specified user
-	ErrHasAccount = newErr("E10031", codes.AlreadyExists, "already has an account")
+	ErrHasAccount = newErr("E10031", codes.AlreadyExists, http.StatusUnprocessableEntity, "already has an account")
 	// Returned when a user is not allowed to perform an operation
-	ErrNotAllowed = newErr("E10032", codes.PermissionDenied, "not allowed")
+	ErrNotAllowed = newErr("E10032", codes.PermissionDenied, http.StatusForbidden, "not allowed")
 	// Returned when trying to delete the last owner of a tenant
-	ErrLastOwner = newErr("E10033", codes.PermissionDenied, "last owner of the tenant")
+	ErrLastOwner = newErr("E10033", codes.PermissionDenied, http.StatusForbidden, "last owner of the tenant")
 	// Returned when an operation timed out after multiple retries
-	ErrRetryTimeout = newErr("E10034", codes.DeadlineExceeded, "timeout after multiple retries")
+	ErrRetryTimeout = newErr("E10034", codes.DeadlineExceeded, http.StatusRequestTimeout, "timeout after multiple retries")
 	// Returned when a field is marked as an ID, and it's not a string
-	ErrInvalidIDType = newErr("E10035", codes.InvalidArgument, "ID fields have to be strings")
+	ErrInvalidIDType = newErr("E10035", codes.InvalidArgument, http.StatusBadRequest, "ID fields have to be strings")
 	// Returned when an ID is not correct
-	ErrInvalidID = newErr("E10036", codes.InvalidArgument, "invalid ID type")
+	ErrInvalidID = newErr("E10036", codes.InvalidArgument, http.StatusBadRequest, "invalid ID type")
 	// Returned when trying to delete an entity that still has dependants
-	ErrNotEmpty = newErr("E10037", codes.FailedPrecondition, "entity is not empty")
+	ErrNotEmpty = newErr("E10037", codes.FailedPrecondition, http.StatusBadRequest, "entity is not empty")
 	// Returned when authentication has failed or is not possible
-	ErrAuthenticationFailed = newErr("E10038", codes.FailedPrecondition, "authentication failed")
+	ErrAuthenticationFailed = newErr("E10038", codes.FailedPrecondition, http.StatusInternalServerError, "authentication failed")
 	// Returned when a given parameter is incorrect (wrong format, value or type)
-	ErrInvalidArgument = newErr("E10039", codes.InvalidArgument, "invalid argument")
+	ErrInvalidArgument = newErr("E10039", codes.InvalidArgument, http.StatusBadRequest, "invalid argument")
 	// Returned when the caller is trying to update a readonly value
-	ErrReadOnly = newErr("E10040", codes.InvalidArgument, "readonly")
+	ErrReadOnly = newErr("E10040", codes.InvalidArgument, http.StatusBadRequest, "readonly")
 	// Returned when the caller tries to create or update a policy with a name that already exists
-	ErrDuplicatePolicyName = newErr("E10041", codes.InvalidArgument, "policy name already exists")
+	ErrDuplicatePolicyName = newErr("E10041", codes.InvalidArgument, http.StatusConflict, "policy name already exists")
 	// Returned when the caller tries to create or update a connection with a name that already exists
-	ErrDuplicateConnectionName = newErr("E10042", codes.InvalidArgument, "connection name already exists")
+	ErrDuplicateConnectionName = newErr("E10042", codes.InvalidArgument, http.StatusConflict, "connection name already exists")
+	// Returned if a module is not found
+	ErrModuleNotFound = newErr("E10043", codes.NotFound, http.StatusNotFound, "module not found")
 )
 
-func newErr(code string, statusCode codes.Code, msg string) *AsertoError {
-	return &AsertoError{code, statusCode, msg, map[string]string{}, nil}
+func newErr(code string, statusCode codes.Code, httpCode int, msg string) *AsertoError {
+	return &AsertoError{code, statusCode, msg, httpCode, map[string]string{}, nil}
 }
 
 // AsertoError represents a well known error
@@ -114,6 +118,7 @@ type AsertoError struct {
 	Code       string
 	StatusCode codes.Code
 	Message    string
+	HttpCode   int
 	Data       map[string]string
 	errs       []error
 }
@@ -142,6 +147,7 @@ func (e *AsertoError) Copy() *AsertoError {
 		Message:    e.Message,
 		Data:       dataCopy,
 		errs:       e.errs,
+		HttpCode:   e.HttpCode,
 	}
 }
 
@@ -291,4 +297,30 @@ func (e *AsertoError) MarshalZerologObject(event *zerolog.Event) {
 
 func (e *AsertoError) GRPCStatus() *status.Status {
 	return status.New(e.StatusCode, e.Message)
+}
+
+func (e *AsertoError) WithGRPCStatus(grpcCode codes.Code) *AsertoError {
+	c := e.Copy()
+	c.StatusCode = grpcCode
+	return c
+}
+
+func (e *AsertoError) WithHTTPStatus(httpStatus int) *AsertoError {
+	c := e.Copy()
+	c.HttpCode = httpStatus
+	return c
+}
+
+func UnwrapAsertoError(err error) *AsertoError {
+	for {
+		aErr, ok := err.(*AsertoError)
+		if ok {
+			return aErr
+		}
+
+		err = errors.Unwrap(err)
+		if err == nil {
+			return nil
+		}
+	}
 }
