@@ -11,13 +11,17 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+const (
+	HttpStatusErrorMetadata = "aserto-http-statuscode"
+)
+
 func CustomErrorHandler(ctx context.Context, gtw *runtime.ServeMux, ms runtime.Marshaler, w http.ResponseWriter, r *http.Request, err error) {
 	if err != nil {
 		st := status.Convert(err)
 		for _, detail := range st.Details() {
 			switch t := detail.(type) {
 			case *errdetails.ErrorInfo:
-				value, ok := t.Metadata["aserto-http-statuscode"]
+				value, ok := t.Metadata[HttpStatusErrorMetadata]
 				if ok {
 					code, conv_err := strconv.Atoi(value)
 					if conv_err != nil {
