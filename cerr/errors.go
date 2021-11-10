@@ -110,6 +110,8 @@ var (
 	ErrUserNotFound = newErr("E10044", codes.NotFound, http.StatusNotFound, "user not found")
 	// Return if a user already exists
 	ErrUserAlreadyExists = newErr("E10045", codes.AlreadyExists, http.StatusConflict, "user already exists")
+	// Returned when authorization has failed or is not possible
+	ErrAuthorizationFailed = newErr("E10045", codes.AlreadyExists, http.StatusUnauthorized, "authorization failed")
 )
 
 func newErr(code string, statusCode codes.Code, httpCode int, msg string) *AsertoError {
