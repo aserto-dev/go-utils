@@ -55,15 +55,15 @@ var (
 	// Returned when there's a problem with a connection's secret
 	ErrConnectionSecret = newErr("E10017", codes.Unavailable, http.StatusInternalServerError, "connection secret error")
 	// Returned when an invite for an email already exists
-	ErrInviteExists = newErr("E10018", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite already exists")
+	ErrInviteExists = newErr("E10018", codes.AlreadyExists, http.StatusConflict, "invite already exists")
 	// Returned when an invitation has expired
-	ErrInviteExpired = newErr("E10019", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite is expired")
+	ErrInviteExpired = newErr("E10019", codes.AlreadyExists, http.StatusConflict, "invite is expired")
 	// Means an existing member of a tenant was invited to join the same tenant
-	ErrAlreadyMember = newErr("E10020", codes.AlreadyExists, http.StatusUnprocessableEntity, "already a tenant member")
+	ErrAlreadyMember = newErr("E10020", codes.AlreadyExists, http.StatusConflict, "already a tenant member")
 	// Returned if an account tried to accept or decline the invite of another account
 	ErrInviteForAnotherUser = newErr("E10021", codes.PermissionDenied, http.StatusForbidden, "invite meant for another user")
 	// Returned if an SCC repository has already been referenced in a policy
-	ErrRepoAlreadyConnected = newErr("E10022", codes.AlreadyExists, http.StatusUnprocessableEntity, "repo has already been connected to a policy")
+	ErrRepoAlreadyConnected = newErr("E10022", codes.AlreadyExists, http.StatusConflict, "repo has already been connected to a policy")
 	// Returned if there was a problem setting up a Github secret
 	ErrGithubSecret = newErr("E10023", codes.Unavailable, http.StatusServiceUnavailable, "failed to setup repo secret")
 	// Returned if there was a problem setting up an Auth0 user
@@ -73,15 +73,15 @@ var (
 	// Returned if a string doesn't look like an auth0 ID
 	ErrInvalidAuth0ID = newErr("E10026", codes.InvalidArgument, http.StatusBadRequest, "invalid auth0 ID")
 	// Returned when an invitation has been accepted
-	ErrInviteAlreadyAccepted = newErr("E10027", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite has already been accepted")
+	ErrInviteAlreadyAccepted = newErr("E10027", codes.AlreadyExists, http.StatusConflict, "invite has already been accepted")
 	// Returned when an invitation has been declined
-	ErrInviteAlreadyDeclined = newErr("E10028", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite has already been declined")
+	ErrInviteAlreadyDeclined = newErr("E10028", codes.AlreadyExists, http.StatusConflict, "invite has already been declined")
 	// Returned when an invitation has been canceled
-	ErrInviteCanceled = newErr("E10029", codes.AlreadyExists, http.StatusUnprocessableEntity, "invite has been canceled")
+	ErrInviteCanceled = newErr("E10029", codes.AlreadyExists, http.StatusConflict, "invite has been canceled")
 	// Returned when a provider verification call has failed
 	ErrProviderVerification = newErr("E10030", codes.InvalidArgument, http.StatusBadRequest, "verification failed")
 	// Means an account already exists for the specified user
-	ErrHasAccount = newErr("E10031", codes.AlreadyExists, http.StatusUnprocessableEntity, "already has an account")
+	ErrHasAccount = newErr("E10031", codes.AlreadyExists, http.StatusConflict, "already has an account")
 	// Returned when a user is not allowed to perform an operation
 	ErrNotAllowed = newErr("E10032", codes.PermissionDenied, http.StatusForbidden, "not allowed")
 	// Returned when trying to delete the last owner of a tenant
@@ -106,6 +106,10 @@ var (
 	ErrDuplicateConnectionName = newErr("E10042", codes.InvalidArgument, http.StatusConflict, "connection name already exists")
 	// Returned if a module is not found
 	ErrModuleNotFound = newErr("E10043", codes.NotFound, http.StatusNotFound, "module not found")
+	// Return if a user is not found
+	ErrUserNotFound = newErr("E10044", codes.NotFound, http.StatusNotFound, "user not found")
+	// Return if a user already exists
+	ErrUserAlreadyExists = newErr("E10045", codes.AlreadyExists, http.StatusConflict, "user already exists")
 )
 
 func newErr(code string, statusCode codes.Code, httpCode int, msg string) *AsertoError {
