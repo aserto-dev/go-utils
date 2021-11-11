@@ -112,7 +112,7 @@ var (
 	// Return if a user already exists
 	ErrUserAlreadyExists = newErr("E10045", codes.AlreadyExists, http.StatusConflict, "user already exists")
 	// Returned when authorization has failed or is not possible
-	ErrAuthorizationFailed = newErr("E10046", codes.AlreadyExists, http.StatusUnauthorized, "authorization failed")
+	ErrAuthorizationFailed = newErr("E10046", codes.PermissionDenied, http.StatusUnauthorized, "authorization failed")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
