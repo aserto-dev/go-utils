@@ -96,7 +96,7 @@ var (
 	// Returned when trying to delete an entity that still has dependants
 	ErrNotEmpty = newErr("E10037", codes.FailedPrecondition, http.StatusBadRequest, "entity is not empty")
 	// Returned when authentication has failed or is not possible
-	ErrAuthenticationFailed = newErr("E10038", codes.FailedPrecondition, http.StatusInternalServerError, "authentication failed")
+	ErrAuthenticationFailed = newErr("E10038", codes.FailedPrecondition, http.StatusUnauthorized, "authentication failed")
 	// Returned when a given parameter is incorrect (wrong format, value or type)
 	ErrInvalidArgument = newErr("E10039", codes.InvalidArgument, http.StatusBadRequest, "invalid argument")
 	// Returned when the caller is trying to update a readonly value
