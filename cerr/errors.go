@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -110,10 +111,16 @@ var (
 	ErrUserNotFound = newErr("E10044", codes.NotFound, http.StatusNotFound, "user not found")
 	// Return if a user already exists
 	ErrUserAlreadyExists = newErr("E10045", codes.AlreadyExists, http.StatusConflict, "user already exists")
+	// Returned when authorization has failed or is not possible
+	ErrAuthorizationFailed = newErr("E10046", codes.PermissionDenied, http.StatusUnauthorized, "authorization failed")
+
+	asertoErrors = make(map[string]*AsertoError)
 )
 
 func newErr(code string, statusCode codes.Code, httpCode int, msg string) *AsertoError {
-	return &AsertoError{code, statusCode, msg, httpCode, map[string]string{}, nil}
+	asertoError := &AsertoError{code, statusCode, msg, httpCode, map[string]string{}, nil}
+	asertoErrors[code] = asertoError
+	return asertoError
 }
 
 // AsertoError represents a well known error
@@ -315,7 +322,32 @@ func (e *AsertoError) WithHTTPStatus(httpStatus int) *AsertoError {
 	return c
 }
 
+// Returns an Aserto error based on a given grpcStatus. The details that are not of type errdetails.ErrorInfo are dropped.
+// and if there are details from multiple errors, the aserto error will be constructed based on the first one.
+func FromGRPCStatus(grpcStatus status.Status) *AsertoError {
+	var result *AsertoError
+	for _, detail := range grpcStatus.Details() {
+		switch t := detail.(type) {
+		case *errdetails.ErrorInfo:
+			result = asertoErrors[t.Domain]
+			result.Data = t.Metadata
+		}
+		if result != nil {
+			break
+		}
+	}
+	return result
+}
+
 func UnwrapAsertoError(err error) *AsertoError {
+	grpcStatus, ok := status.FromError(err)
+	if ok {
+		aErr := FromGRPCStatus(*grpcStatus)
+		if aErr != nil {
+			return aErr
+		}
+	}
+
 	for {
 		aErr, ok := err.(*AsertoError)
 		if ok {
