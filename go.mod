@@ -7,7 +7,6 @@ require (
 	github.com/alecthomas/colour v0.1.0 // indirect
 	github.com/alecthomas/repr v0.0.0-20210801044451-80ca428c5142 // indirect
 	github.com/allegro/bigcache/v3 v3.0.0
-	github.com/aserto-dev/go-grpc v0.0.19
 	github.com/aserto-dev/mage-loot v0.4.12
 	github.com/go-test/deep v1.0.7
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
