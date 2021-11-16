@@ -3,12 +3,13 @@ module github.com/aserto-dev/go-utils
 go 1.16
 
 require (
+	github.com/OneOfOne/xxhash v1.2.2
 	github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38
 	github.com/alecthomas/colour v0.1.0 // indirect
 	github.com/alecthomas/repr v0.0.0-20210801044451-80ca428c5142 // indirect
-	github.com/allegro/bigcache/v3 v3.0.1
-	github.com/aserto-dev/mage-loot v0.4.13
-	github.com/go-test/deep v1.0.8
+	github.com/allegro/bigcache/v3 v3.0.0
+	github.com/aserto-dev/mage-loot v0.4.6
+	github.com/go-test/deep v1.0.7
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0
 	github.com/hashicorp/go-hclog v0.16.2
@@ -19,9 +20,9 @@ require (
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0
-	github.com/tidwall/gjson v1.11.0
+	github.com/tidwall/gjson v1.8.1
 	github.com/ulikunitz/xz v0.5.10
-	google.golang.org/genproto v0.0.0-20211111162719-482062a4217b
-	google.golang.org/grpc v1.42.0
+	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83
+	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
 )
