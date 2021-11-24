@@ -50,7 +50,7 @@ func TestFromGRPCStatus(t *testing.T) {
 	grpcStatus := status.New(initialErr.StatusCode, initialErr.Error())
 	grpcStatus, err := grpcStatus.WithDetails(&errdetails.ErrorInfo{
 		Reason:   "1234",
-		Metadata: initialErr.Data,
+		Metadata: initialErr.Data(),
 		Domain:   initialErr.Code,
 	})
 

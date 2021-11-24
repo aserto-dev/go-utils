@@ -130,8 +130,12 @@ type AsertoError struct {
 	StatusCode codes.Code
 	Message    string
 	HttpCode   int
-	Data       map[string]string
+	data       map[string]string
 	errs       []error
+}
+
+func (e *AsertoError) Data() map[string]string {
+	return e.Copy().data
 }
 
 // SameAs returns true if the provided error is an AsertoError
@@ -146,9 +150,9 @@ func (e *AsertoError) SameAs(err error) bool {
 }
 
 func (e *AsertoError) Copy() *AsertoError {
-	dataCopy := make(map[string]string, len(e.Data))
+	dataCopy := make(map[string]string, len(e.data))
 
-	for k, v := range e.Data {
+	for k, v := range e.data {
 		dataCopy[k] = v
 	}
 
@@ -156,7 +160,7 @@ func (e *AsertoError) Copy() *AsertoError {
 		Code:       e.Code,
 		StatusCode: e.StatusCode,
 		Message:    e.Message,
-		Data:       dataCopy,
+		data:       dataCopy,
 		errs:       e.errs,
 		HttpCode:   e.HttpCode,
 	}
@@ -181,9 +185,9 @@ func (e *AsertoError) Error() string {
 }
 
 func (e *AsertoError) Fields() map[string]interface{} {
-	result := make(map[string]interface{}, len(e.Data))
+	result := make(map[string]interface{}, len(e.data))
 
-	for k, v := range e.Data {
+	for k, v := range e.data {
 		result[k] = v
 	}
 
@@ -200,9 +204,9 @@ func (e *AsertoError) Err(err error) *AsertoError {
 	c.errs = append(c.errs, err)
 
 	if aErr, ok := err.(*AsertoError); ok {
-		for k, v := range aErr.Data {
-			if _, ok := c.Data[k]; !ok {
-				c.Data[k] = v
+		for k, v := range aErr.data {
+			if _, ok := c.data[k]; !ok {
+				c.data[k] = v
 			}
 		}
 	}
@@ -213,10 +217,10 @@ func (e *AsertoError) Err(err error) *AsertoError {
 func (e *AsertoError) Msg(message string) *AsertoError {
 	c := e.Copy()
 
-	if existingMsg, ok := c.Data[MessageKey]; ok {
-		c.Data[MessageKey] = strings.Join([]string{existingMsg, message}, ": ")
+	if existingMsg, ok := c.data[MessageKey]; ok {
+		c.data[MessageKey] = strings.Join([]string{existingMsg, message}, ": ")
 	} else {
-		c.Data[MessageKey] = message
+		c.data[MessageKey] = message
 	}
 
 	return c
@@ -227,41 +231,42 @@ func (e *AsertoError) Msgf(message string, args ...interface{}) *AsertoError {
 
 	message = fmt.Sprintf(message, args...)
 
-	if existingMsg, ok := c.Data[MessageKey]; ok {
-		c.Data[MessageKey] = strings.Join([]string{existingMsg, message}, ": ")
+	if existingMsg, ok := c.data[MessageKey]; ok {
+		c.data[MessageKey] = strings.Join([]string{existingMsg, message}, ": ")
 	} else {
-		c.Data[MessageKey] = message
+		c.data[MessageKey] = message
 	}
 	return c
 }
 
 func (e *AsertoError) Str(key, value string) *AsertoError {
 	c := e.Copy()
-	c.Data[key] = value
+	c.data[key] = value
 	return c
 }
 
 func (e *AsertoError) Int(key string, value int) *AsertoError {
 	c := e.Copy()
-	c.Data[key] = fmt.Sprintf("%d", value)
+	c.data[key] = fmt.Sprintf("%d", value)
 	return c
 }
 
 func (e *AsertoError) Bool(key string, value bool) *AsertoError {
 	c := e.Copy()
-	c.Data[key] = fmt.Sprintf("%t", value)
+	c.data[key] = fmt.Sprintf("%t", value)
+
 	return c
 }
 
 func (e *AsertoError) Duration(key string, value time.Duration) *AsertoError {
 	c := e.Copy()
-	c.Data[key] = value.String()
+	c.data[key] = value.String()
 	return c
 }
 
 func (e *AsertoError) Time(key string, value time.Time) *AsertoError {
 	c := e.Copy()
-	c.Data[key] = value.UTC().Format(time.RFC3339)
+	c.data[key] = value.UTC().Format(time.RFC3339)
 	return c
 }
 
@@ -274,14 +279,14 @@ func (e *AsertoError) FromReader(key string, value io.Reader) *AsertoError {
 	}
 
 	c := e.Copy()
-	c.Data[key] = buf.String()
+	c.data[key] = buf.String()
 
 	return c
 }
 
 func (e *AsertoError) Interface(key string, value interface{}) *AsertoError {
 	c := e.Copy()
-	c.Data[key] = fmt.Sprintf("%+v", value)
+	c.data[key] = fmt.Sprintf("%+v", value)
 	return c
 }
 
@@ -330,7 +335,7 @@ func FromGRPCStatus(grpcStatus status.Status) *AsertoError {
 		switch t := detail.(type) {
 		case *errdetails.ErrorInfo:
 			result = asertoErrors[t.Domain]
-			result.Data = t.Metadata
+			result.data = t.Metadata
 		}
 		if result != nil {
 			break
