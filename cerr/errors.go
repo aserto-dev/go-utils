@@ -115,6 +115,8 @@ var (
 	ErrAuthorizationFailed = newErr("E10046", codes.PermissionDenied, http.StatusUnauthorized, "authorization failed")
 	// Returned when a runtime query has an error
 	ErrBadQuery = newErr("E10047", codes.InvalidArgument, http.StatusBadRequest, "invalid query")
+	// Returned when a runtime query has an error
+	ErrQueryExecutionFailed = newErr("E10048", codes.FailedPrecondition, http.StatusBadRequest, "query failed")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
