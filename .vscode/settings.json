@@ -3,6 +3,7 @@
     "aserto",
     "Cerr",
     "fsutil",
+    "Msgf",
     "Wrapf",
     "xxhash"
   ]

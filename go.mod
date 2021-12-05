@@ -3,7 +3,7 @@ module github.com/aserto-dev/go-utils
 go 1.16
 
 require (
-	github.com/OneOfOne/xxhash v1.2.2
+	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38
 	github.com/alecthomas/colour v0.1.0 // indirect
 	github.com/alecthomas/repr v0.0.0-20210801044451-80ca428c5142 // indirect
@@ -15,6 +15,7 @@ require (
 	github.com/hashicorp/go-hclog v0.16.2
 	github.com/jpillora/backoff v1.0.0
 	github.com/magefile/mage v1.11.0
+	github.com/open-policy-agent/opa v0.35.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.23.0
 	github.com/sergi/go-diff v1.2.0 // indirect
