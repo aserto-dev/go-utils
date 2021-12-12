@@ -39,11 +39,15 @@ func (c *Config) ParseLogLevel(defaultLevel zerolog.Level) error {
 	return nil
 }
 
-// NewLogger returns a new zap logger
-func NewLogger(logOutput io.Writer, cfg *Config) (*zerolog.Logger, error) {
+// NewLogger returns a new logger
+func NewLogger(logOutput io.Writer, errorOutput io.Writer, cfg *Config) (*zerolog.Logger, error) {
 	var logger zerolog.Logger
 	if cfg.Prod {
-		logger = zerolog.New(logOutput).With().Timestamp().Logger()
+		writer := &LevelWriter{
+			Writer:      logOutput,
+			ErrorWriter: errorOutput,
+		}
+		logger = zerolog.New(writer).With().Timestamp().Logger()
 	} else {
 		cw := zerolog.NewConsoleWriter()
 		cw.Out = logOutput

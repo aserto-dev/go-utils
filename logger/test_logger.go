@@ -13,7 +13,7 @@ func TestLogger(logOutput io.Writer) *zerolog.Logger {
 	cfg.LogLevel = "trace"
 	cfg.LogLevelParsed = zerolog.TraceLevel
 
-	logger, err := NewLogger(logOutput, &cfg)
+	logger, err := NewLogger(logOutput, logOutput, &cfg)
 	if err != nil {
 		panic(err)
 	}
