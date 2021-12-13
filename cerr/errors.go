@@ -117,6 +117,8 @@ var (
 	ErrBadQuery = newErr("E10047", codes.InvalidArgument, http.StatusBadRequest, "invalid query")
 	// Returned when a runtime query has an error
 	ErrQueryExecutionFailed = newErr("E10048", codes.FailedPrecondition, http.StatusBadRequest, "query failed")
+	// Returned when the account has not setup a personal tenant yet
+	ErrPersonalTenantRequired = newErr("E10049", codes.FailedPrecondition, http.StatusBadRequest, "personal tenant required")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
