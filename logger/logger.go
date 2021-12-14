@@ -15,6 +15,9 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
+type ErrWriter io.Writer
+type Writer io.Writer
+
 // Config represents logging configuration
 type Config struct {
 	Prod           bool          `json:"prod"`
@@ -40,7 +43,7 @@ func (c *Config) ParseLogLevel(defaultLevel zerolog.Level) error {
 }
 
 // NewLogger returns a new logger
-func NewLogger(logOutput io.Writer, errorOutput io.Writer, cfg *Config) (*zerolog.Logger, error) {
+func NewLogger(logOutput Writer, errorOutput ErrWriter, cfg *Config) (*zerolog.Logger, error) {
 	var logger zerolog.Logger
 	if cfg.Prod {
 		writer := &LevelWriter{
