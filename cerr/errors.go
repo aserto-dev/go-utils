@@ -352,6 +352,9 @@ func FromGRPCStatus(grpcStatus status.Status) *AsertoError {
 
 func UnwrapAsertoError(err error) *AsertoError {
 	initialError := errors.Cause(err)
+	if initialError == nil {
+		initialError = err
+	}
 	grpcStatus, ok := status.FromError(initialError)
 	if ok {
 		aErr := FromGRPCStatus(*grpcStatus)
