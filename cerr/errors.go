@@ -1,13 +1,13 @@
 package cerr
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -351,7 +351,8 @@ func FromGRPCStatus(grpcStatus status.Status) *AsertoError {
 }
 
 func UnwrapAsertoError(err error) *AsertoError {
-	grpcStatus, ok := status.FromError(err)
+	initialError := errors.Cause(err)
+	grpcStatus, ok := status.FromError(initialError)
 	if ok {
 		aErr := FromGRPCStatus(*grpcStatus)
 		if aErr != nil {
