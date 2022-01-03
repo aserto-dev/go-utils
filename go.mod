@@ -1,12 +1,10 @@
 module github.com/aserto-dev/go-utils
 
-go 1.16
+go 1.17
 
 require (
 	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38
-	github.com/alecthomas/colour v0.1.0 // indirect
-	github.com/alecthomas/repr v0.0.0-20210801044451-80ca428c5142 // indirect
 	github.com/allegro/bigcache/v3 v3.0.0
 	github.com/aserto-dev/mage-loot v0.4.6
 	github.com/go-test/deep v1.0.7
@@ -18,7 +16,6 @@ require (
 	github.com/open-policy-agent/opa v0.35.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.23.0
-	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.8.1
@@ -26,4 +23,28 @@ require (
 	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83
 	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
+)
+
+require (
+	github.com/alecthomas/colour v0.1.0 // indirect
+	github.com/alecthomas/repr v0.0.0-20210801044451-80ca428c5142 // indirect
+	github.com/aserto-dev/clui v0.1.1 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/fatih/color v1.10.0 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/imdario/mergo v0.3.12 // indirect
+	github.com/kyokomi/emoji v2.2.4+incompatible // indirect
+	github.com/mattn/go-colorable v0.1.8 // indirect
+	github.com/mattn/go-isatty v0.0.12 // indirect
+	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/olekukonko/tablewriter v0.0.5 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
+	github.com/tidwall/match v1.0.3 // indirect
+	github.com/tidwall/pretty v1.1.0 // indirect
+	golang.org/x/net v0.0.0-20211111083644-e5c967477495 // indirect
+	golang.org/x/sys v0.0.0-20211110154304-99a53858aa08 // indirect
+	golang.org/x/text v0.3.6 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
