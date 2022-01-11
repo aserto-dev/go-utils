@@ -119,6 +119,10 @@ var (
 	ErrQueryExecutionFailed = newErr("E10048", codes.FailedPrecondition, http.StatusBadRequest, "query failed")
 	// Returned when the account has not setup a personal tenant yet
 	ErrPersonalTenantRequired = newErr("E10049", codes.FailedPrecondition, http.StatusBadRequest, "personal tenant required")
+	// Returned if a policy builder id is not found in the database
+	ErrPolicyBuilderNotFound = newErr("E10050", codes.NotFound, http.StatusNotFound, "policy builder not found")
+	// Returned if a policy builder id is invalid
+	ErrInvalidPolicyBuilderID = newErr("E10051", codes.InvalidArgument, http.StatusBadRequest, "invalid policy builder id")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
