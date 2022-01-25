@@ -9,15 +9,35 @@ import (
 // ZerologWriter implements io.Writer for a zerolog logger
 type ZerologWriter struct {
 	logger *zerolog.Logger
+	level  zerolog.Level
 }
 
 // NewZerologWriter creates a new ZerologWriter
 func NewZerologWriter(logger *zerolog.Logger) *ZerologWriter {
-	return &ZerologWriter{logger: logger}
+	return NewZerologWriterWithLevel(logger, zerolog.InfoLevel)
+}
+
+func NewZerologWriterWithLevel(logger *zerolog.Logger, level zerolog.Level) *ZerologWriter {
+	return &ZerologWriter{logger: logger, level: zerolog.InfoLevel}
 }
 
 func (z *ZerologWriter) Write(p []byte) (n int, err error) {
-	z.logger.Info().Msg(string(p))
+	msg := string(p)
+
+	switch z.level {
+	case zerolog.InfoLevel:
+		z.logger.Info().Msg(msg)
+	case zerolog.DebugLevel:
+		z.logger.Debug().Msg(msg)
+	case zerolog.ErrorLevel:
+		z.logger.Error().Msg(msg)
+	case zerolog.WarnLevel:
+		z.logger.Warn().Msg(msg)
+	case zerolog.TraceLevel:
+		z.logger.Trace().Msg(msg)
+	default:
+		z.logger.Info().Msg(msg)
+	}
 	return len(p), nil
 }
 
