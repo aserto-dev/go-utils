@@ -18,7 +18,7 @@ func NewZerologWriter(logger *zerolog.Logger) *ZerologWriter {
 }
 
 func NewZerologWriterWithLevel(logger *zerolog.Logger, level zerolog.Level) *ZerologWriter {
-	return &ZerologWriter{logger: logger, level: zerolog.InfoLevel}
+	return &ZerologWriter{logger: logger, level: level}
 }
 
 func (z *ZerologWriter) Write(p []byte) (n int, err error) {
