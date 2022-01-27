@@ -123,6 +123,8 @@ var (
 	ErrPolicyBuilderNotFound = newErr("E10050", codes.NotFound, http.StatusNotFound, "policy builder not found")
 	// Returned if a policy builder id is invalid
 	ErrInvalidPolicyBuilderID = newErr("E10051", codes.InvalidArgument, http.StatusBadRequest, "invalid policy builder id")
+	// Returned when discovery for policy runtime configuration has failed
+	ErrDiscoveryFailed = newErr("E10051", codes.Unavailable, http.StatusServiceUnavailable, "discovery failed")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
