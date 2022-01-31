@@ -125,6 +125,8 @@ var (
 	ErrInvalidPolicyBuilderID = newErr("E10051", codes.InvalidArgument, http.StatusBadRequest, "invalid policy builder id")
 	// Returned when discovery for policy runtime configuration has failed
 	ErrDiscoveryFailed = newErr("E10051", codes.Unavailable, http.StatusServiceUnavailable, "discovery failed")
+	// Returned when a decision is invalid
+	ErrInvalidDecision = newErr("E10052", codes.InvalidArgument, http.StatusBadRequest, "invalid decision")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
