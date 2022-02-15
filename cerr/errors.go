@@ -127,8 +127,10 @@ var (
 	ErrDiscoveryFailed = newErr("E10051", codes.Unavailable, http.StatusServiceUnavailable, "discovery failed")
 	// Returned when a decision is invalid
 	ErrInvalidDecision = newErr("E10052", codes.InvalidArgument, http.StatusBadRequest, "invalid decision")
-
-	asertoErrors = make(map[string]*AsertoError)
+	// Returned when a runtime failed to load
+	ErrBadRuntime = newErr("E10053", codes.Unavailable, http.StatusServiceUnavailable, "runtime loading failed")
+	
+	asertoErrors  = make(map[string]*AsertoError)
 )
 
 func newErr(code string, statusCode codes.Code, httpCode int, msg string) *AsertoError {
