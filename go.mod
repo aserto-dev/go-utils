@@ -6,7 +6,7 @@ require (
 	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38
 	github.com/allegro/bigcache/v3 v3.0.1
-	github.com/aserto-dev/mage-loot v0.7.0
+	github.com/aserto-dev/mage-loot v0.8.0
 	github.com/go-test/deep v1.0.8
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0
@@ -28,7 +28,7 @@ require (
 require (
 	github.com/alecthomas/colour v0.1.0 // indirect
 	github.com/alecthomas/repr v0.0.0-20210801044451-80ca428c5142 // indirect
-	github.com/aserto-dev/clui v0.7.0 // indirect
+	github.com/aserto-dev/clui v0.8.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
