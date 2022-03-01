@@ -129,8 +129,10 @@ var (
 	ErrInvalidDecision = newErr("E10052", codes.InvalidArgument, http.StatusBadRequest, "invalid decision")
 	// Returned when a runtime failed to load
 	ErrBadRuntime = newErr("E10053", codes.Unavailable, http.StatusServiceUnavailable, "runtime loading failed")
-	
-	asertoErrors  = make(map[string]*AsertoError)
+	// Returned when there's a problem getting a gitlab access token.
+	ErrGitlabAccessToken = newErr("E10054", codes.Unavailable, http.StatusServiceUnavailable, "failed to retrieve gitlab access token")
+
+	asertoErrors = make(map[string]*AsertoError)
 )
 
 func newErr(code string, statusCode codes.Code, httpCode int, msg string) *AsertoError {
