@@ -131,6 +131,8 @@ var (
 	ErrBadRuntime = newErr("E10053", codes.Unavailable, http.StatusServiceUnavailable, "runtime loading failed")
 	// Returned when there's a problem getting a gitlab access token.
 	ErrGitlabAccessToken = newErr("E10054", codes.Unavailable, http.StatusServiceUnavailable, "failed to retrieve gitlab access token")
+	// Returned when a tag is not a valid policy
+	ErrInvalidPolicyTag = newErr("E10055", codes.InvalidArgument, http.StatusBadRequest, "invalid policy tag")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
