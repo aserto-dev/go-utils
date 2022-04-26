@@ -133,6 +133,12 @@ var (
 	ErrGitlabAccessToken = newErr("E10054", codes.Unavailable, http.StatusServiceUnavailable, "failed to retrieve gitlab access token")
 	// Returned when a tag is not a valid policy
 	ErrInvalidPolicyTag = newErr("E10055", codes.InvalidArgument, http.StatusBadRequest, "invalid policy tag")
+	// Returned if a policy instance is not found in the database
+	ErrPolicyInstanceNotFound = newErr("E10056", codes.NotFound, http.StatusNotFound, "policy instance not found")
+	// Returned if a policy repository is not found in the database
+	ErrPolicyRepositoryNotFound = newErr("E10057", codes.NotFound, http.StatusNotFound, "policy repository not found")
+	// Returned if a policy source is not found in the database
+	ErrPolicySourceNotFound = newErr("E10058", codes.NotFound, http.StatusNotFound, "policy source not found")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
