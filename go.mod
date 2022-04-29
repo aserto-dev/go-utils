@@ -14,6 +14,7 @@ require (
 	github.com/hashicorp/go-hclog v1.0.0
 	github.com/jpillora/backoff v1.0.0
 	github.com/magefile/mage v1.12.1
+	github.com/mitchellh/mapstructure v1.4.3
 	github.com/open-policy-agent/opa v0.37.2
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.23.0
