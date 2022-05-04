@@ -139,6 +139,12 @@ var (
 	ErrPolicyRepositoryNotFound = newErr("E10057", codes.NotFound, http.StatusNotFound, "policy repository not found")
 	// Returned if a policy source is not found in the database
 	ErrPolicySourceNotFound = newErr("E10058", codes.NotFound, http.StatusNotFound, "policy source not found")
+	// Returned if a source has already been attached to a policy
+	ErrPolicySourceAlreadySet = newErr("E10059", codes.FailedPrecondition, http.StatusBadRequest, "source already set")
+	// Returned if the organization is not found in the source code provier
+	ErrSCCOrganizationNotFound = newErr("E10060", codes.NotFound, http.StatusNotFound, "source code control organization not found")
+	// Returned if the repo is not found in the source code provier
+	ErrSCCRepoNotFound = newErr("E10061", codes.NotFound, http.StatusNotFound, "source code control repository not found")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
