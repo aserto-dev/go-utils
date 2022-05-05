@@ -145,8 +145,8 @@ var (
 	ErrSCCOrganizationNotFound = newErr("E10060", codes.NotFound, http.StatusNotFound, "source code control organization not found")
 	// Returned if the repo is not found in the source code provier
 	ErrSCCRepoNotFound = newErr("E10061", codes.NotFound, http.StatusNotFound, "source code control repository not found")
-	// Returned if a policy has already a repository connected
-	ErrPolicyRepositoryAlreadyConnected = newErr("E10062", codes.AlreadyExists, http.StatusConflict, "the policy has already a repository connected")
+	// Returned if a policy already has a connected repository
+	ErrPolicyRepositoryAlreadyConnected = newErr("E10062", codes.AlreadyExists, http.StatusConflict, "the policy already has a repository connected")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
