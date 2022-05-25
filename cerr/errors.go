@@ -413,12 +413,12 @@ func Equals(err1, err2 error) bool {
 	asertoErr1 := UnwrapAsertoError(err1)
 	asertoErr2 := UnwrapAsertoError(err2)
 
-	if asertoErr1 == nil || asertoErr2 == nil {
-		return false
+	if err1 == nil && err2 == nil {
+		return true
 	}
 
-	if asertoErr1 == nil && asertoErr2 == nil {
-		return true
+	if asertoErr1 == nil || asertoErr2 == nil {
+		return false
 	}
 
 	return asertoErr1.Code == asertoErr2.Code

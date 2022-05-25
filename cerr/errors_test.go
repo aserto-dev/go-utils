@@ -94,5 +94,29 @@ func TestEqualsNil(t *testing.T) {
 func TestEqualsOneNil(t *testing.T) {
 	assert := require.New(t)
 
+	assert.False(cerr.Equals(cerr.ErrAccountNotFound, nil))
+}
+
+func TestEqualsNormalErrorOneNil(t *testing.T) {
+	assert := require.New(t)
+
 	assert.False(cerr.Equals(errors.New("boom"), nil))
+}
+
+func TestEqualsErrCerr(t *testing.T) {
+	assert := require.New(t)
+
+	assert.False(cerr.Equals(errors.New("boom"), cerr.ErrAccountNotFound))
+}
+
+func TestEqualsFalse(t *testing.T) {
+	assert := require.New(t)
+
+	assert.False(cerr.Equals(cerr.ErrAlreadyMember, cerr.ErrAccountNotFound))
+}
+
+func TestEqualsNormalErrors(t *testing.T) {
+	assert := require.New(t)
+
+	assert.False(cerr.Equals(errors.New("boom1"), errors.New("boom2")))
 }
