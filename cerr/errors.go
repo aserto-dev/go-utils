@@ -147,6 +147,8 @@ var (
 	ErrSCCRepoNotFound = newErr("E10061", codes.NotFound, http.StatusNotFound, "source code control repository not found")
 	// Returned if a policy already has a connected repository
 	ErrPolicyRepositoryAlreadyConnected = newErr("E10062", codes.AlreadyExists, http.StatusConflict, "the policy already has a repository connected")
+	// Returned if the cloning of a repo from one registry to another fails
+	ErrPolicyRepoCloneFailed = newErr("E10063", codes.InvalidArgument, http.StatusBadRequest, "repo clone failed")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
