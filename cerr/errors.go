@@ -379,6 +379,10 @@ func FromGRPCStatus(grpcStatus status.Status) *AsertoError {
 }
 
 func UnwrapAsertoError(err error) *AsertoError {
+	if err == nil {
+		return nil
+	}
+
 	initialError := errors.Cause(err)
 	if initialError == nil {
 		initialError = err
@@ -402,4 +406,20 @@ func UnwrapAsertoError(err error) *AsertoError {
 			return nil
 		}
 	}
+}
+
+// Returns true if the given errors are Aserto errors with the same code or both of them are nil.
+func Equals(err1, err2 error) bool {
+	asertoErr1 := UnwrapAsertoError(err1)
+	asertoErr2 := UnwrapAsertoError(err2)
+
+	if asertoErr1 == nil || asertoErr2 == nil {
+		return false
+	}
+
+	if asertoErr1 == nil && asertoErr2 == nil {
+		return true
+	}
+
+	return asertoErr1.Code == asertoErr2.Code
 }
