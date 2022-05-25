@@ -1,6 +1,7 @@
 package cerr_test
 
 import (
+	"errors"
 	"net/http"
 	"testing"
 
@@ -64,4 +65,34 @@ func TestFromGRPCStatus(t *testing.T) {
 
 	assert.Equal(initialErr.Error(), transformedErr.Error())
 	assert.Equal(initialErr.Message, transformedErr.Message)
+}
+
+func TestUnwrapNilErr(t *testing.T) {
+	assert := require.New(t)
+
+	err := cerr.UnwrapAsertoError(nil)
+
+	assert.Nil(err)
+}
+
+func TestEquals(t *testing.T) {
+	assert := require.New(t)
+
+	err1 := cerr.ErrConnection.Msgf("error 1").Str("key1", "val1").Err(errors.New("boom"))
+	err2 := cerr.ErrConnection.Msgf("error 2").Str("key2", "val2").Err(errors.New("zoom"))
+
+	assert.True(cerr.Equals(err1, err2))
+
+}
+
+func TestEqualsNil(t *testing.T) {
+	assert := require.New(t)
+
+	assert.True(cerr.Equals(nil, nil))
+}
+
+func TestEqualsOneNil(t *testing.T) {
+	assert := require.New(t)
+
+	assert.False(cerr.Equals(errors.New("boom"), nil))
 }
