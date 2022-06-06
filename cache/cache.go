@@ -23,6 +23,7 @@ const (
 	Redis
 	MemCache
 	BigCache
+	NatsJSCache
 )
 
 type CacheConfig struct {
@@ -30,10 +31,14 @@ type CacheConfig struct {
 	RedisConfig     redis.Options   `json:"redis"`
 	MemCacheServers []string        `json:"memcache_servers"`
 	FreeCacheSize   int             `json:"freecache_size"`
+	NatsJSConfig    NatsConfig      `json:"nats_js_config"`
 	TTL             time.Duration   `json:"ttl"`
 }
 
 func NewCache(logger *zerolog.Logger, cacheType CacheType, config CacheConfig) (cache.CacheInterface, error) {
+	if config.TTL == 0 {
+		return nil, errors.New("TTL configuration value is required")
+	}
 	switch cacheType {
 	case FreeCache:
 		{
@@ -70,7 +75,15 @@ func NewCache(logger *zerolog.Logger, cacheType CacheType, config CacheConfig) (
 			cacheManager := cache.New(gocacheStore)
 			return cacheManager, nil
 		}
-
+	case NatsJSCache:
+		{
+			config.NatsJSConfig.KVConfig.TTL = config.TTL
+			cacheManager, err := NewNatsJSCache(logger, config.NatsJSConfig)
+			if err != nil {
+				return nil, err
+			}
+			return cacheManager, nil
+		}
 	default:
 		{
 			return nil, errors.New("cache type not supported")
@@ -83,10 +96,11 @@ func (t CacheType) String() string {
 }
 
 var cacheTypeToString = map[CacheType]string{
-	FreeCache: "freecache",
-	BigCache:  "bigcache",
-	Redis:     "redis",
-	MemCache:  "memcache",
+	FreeCache:   "freecache",
+	BigCache:    "bigcache",
+	Redis:       "redis",
+	MemCache:    "memcache",
+	NatsJSCache: "natsjs",
 }
 
 var cacheTypeToID = map[string]CacheType{
@@ -94,6 +108,7 @@ var cacheTypeToID = map[string]CacheType{
 	"redis":     Redis,
 	"memcache":  MemCache,
 	"freecache": FreeCache,
+	"natsjs":    NatsJSCache,
 }
 
 // MarshalJSON marshals the enum as a quoted json string

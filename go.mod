@@ -20,6 +20,7 @@ require (
 	github.com/jpillora/backoff v1.0.0
 	github.com/magefile/mage v1.12.1
 	github.com/mitchellh/mapstructure v1.4.3
+	github.com/nats-io/nats.go v1.16.0
 	github.com/open-policy-agent/opa v0.37.2
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.23.0
@@ -50,6 +51,9 @@ require (
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/nats-io/nats-server/v2 v2.8.4 // indirect
+	github.com/nats-io/nkeys v0.3.0 // indirect
+	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/pegasus-kv/thrift v0.13.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
@@ -63,6 +67,7 @@ require (
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
+	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd // indirect
 	golang.org/x/net v0.0.0-20220412020605-290c469a71a5 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
