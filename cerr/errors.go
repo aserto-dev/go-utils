@@ -93,7 +93,7 @@ var (
 	ErrInvalidIDType = newErr("E10035", codes.InvalidArgument, http.StatusBadRequest, "ID fields have to be strings")
 	// Returned when an ID is not correct
 	ErrInvalidID = newErr("E10036", codes.InvalidArgument, http.StatusBadRequest, "invalid ID type")
-	// Returned when trying to delete an entity that still has dependants
+	// Returned when trying to delete an entity that still has dependents
 	ErrNotEmpty = newErr("E10037", codes.FailedPrecondition, http.StatusBadRequest, "entity is not empty")
 	// Returned when authentication has failed or is not possible
 	ErrAuthenticationFailed = newErr("E10038", codes.FailedPrecondition, http.StatusUnauthorized, "authentication failed")
@@ -141,12 +141,22 @@ var (
 	ErrPolicySourceNotFound = newErr("E10058", codes.NotFound, http.StatusNotFound, "policy source not found")
 	// Returned if a source has already been attached to a policy
 	ErrPolicySourceAlreadySet = newErr("E10059", codes.FailedPrecondition, http.StatusBadRequest, "source already set")
-	// Returned if the organization is not found in the source code provier
+	// Returned if the organization is not found in the source code provider
 	ErrSCCOrganizationNotFound = newErr("E10060", codes.NotFound, http.StatusNotFound, "source code control organization not found")
-	// Returned if the repo is not found in the source code provier
+	// Returned if the repo is not found in the source code provider
 	ErrSCCRepoNotFound = newErr("E10061", codes.NotFound, http.StatusNotFound, "source code control repository not found")
 	// Returned if a policy already has a connected repository
 	ErrPolicyRepositoryAlreadyConnected = newErr("E10062", codes.AlreadyExists, http.StatusConflict, "the policy already has a repository connected")
+	// Returned if object type is not defined in the directory
+	ErrDirectoryObjectTypeUnknown = newErr("E10063", codes.Unknown, http.StatusNotFound, "directory object type unknown")
+	// Returned if relation type is not defined in the directory
+	ErrDirectoryRelationTypeUnknown = newErr("E10064", codes.NotFound, http.StatusNotFound, "directory relation type unknown")
+	// Returned if permission is not defined in the directory
+	ErrDirectoryPermissionUnknown = newErr("E10065", codes.NotFound, http.StatusNotFound, "directory permission unknown")
+	// Returned if object object id is not found in the directory
+	ErrDirectoryObjectNotFound = newErr("E10066", codes.NotFound, http.StatusNotFound, "directory object not found")
+	// Returned if relation object is not found in the directory
+	ErrDirectoryRelationNotFound = newErr("E10067", codes.NotFound, http.StatusNotFound, "directory relation not found")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
