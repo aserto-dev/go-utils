@@ -3,8 +3,12 @@
     "aserto",
     "Cerr",
     "fsutil",
+    "grpclog",
+    "logrus",
     "Msgf",
+    "pkgerrors",
     "Wrapf",
-    "xxhash"
+    "xxhash",
+    "Zerolog"
   ]
 }

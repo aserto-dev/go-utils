@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"sync"
 	"testing"
 )
 
@@ -12,6 +13,7 @@ type LogDebugger struct {
 	outLogPath string
 	outLog     *os.File
 	buffer     *strings.Builder
+	locker     *sync.Mutex
 }
 
 func NewLogDebugger(t *testing.T, logName string) *LogDebugger {
@@ -28,10 +30,13 @@ func NewLogDebugger(t *testing.T, logName string) *LogDebugger {
 		outLog:     outLog,
 		outLogPath: outLogPath,
 		buffer:     &strings.Builder{},
+		locker:     &sync.Mutex{},
 	}
 }
 
 func (d *LogDebugger) Write(p []byte) (int, error) {
+	d.locker.Lock()
+	defer d.locker.Unlock()
 	_, err := d.buffer.Write(p)
 	if err != nil {
 		d.t.Error(err)

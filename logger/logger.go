@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog"
@@ -17,6 +18,8 @@ import (
 
 type ErrWriter io.Writer
 type Writer io.Writer
+
+var once = &sync.Once{}
 
 // Config represents logging configuration
 type Config struct {
@@ -56,27 +59,30 @@ func NewLogger(logOutput Writer, errorOutput ErrWriter, cfg *Config) (*zerolog.L
 		cw.Out = logOutput
 		logger = zerolog.New(cw).With().Timestamp().Logger()
 	}
-	zerolog.SetGlobalLevel(cfg.LogLevelParsed)
-	zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 
-	// Override standard log output with zerolog
-	stdLogger := logger.With().Str("log-source", "std").Logger()
-	log.SetOutput(NewZerologWriter(&stdLogger))
+	once.Do(func() {
+		zerolog.SetGlobalLevel(cfg.LogLevelParsed)
+		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 
-	// Override logrus with zerolog
-	logrusLogger := logger.With().Str("log-source", "logrus").Logger()
-	logrus.AddHook(&logrusHook{logger: &logrusLogger, writer: logOutput})
-	logrus.SetLevel(logrus.TraceLevel)
-	logrus.SetOutput(ioutil.Discard)
+		// Override standard log output with zerolog
+		stdLogger := logger.With().Str("log-source", "std").Logger()
+		log.SetOutput(NewZerologWriter(&stdLogger))
 
-	// Override GRPC logging with zerolog
-	grpclog.SetLoggerV2(NewGRPCZeroLogger(&logger))
+		// Override logrus with zerolog
+		logrusLogger := logger.With().Str("log-source", "logrus").Logger()
+		logrus.AddHook(&logrusHook{logger: &logrusLogger, writer: logOutput})
+		logrus.SetLevel(logrus.TraceLevel)
+		logrus.SetOutput(ioutil.Discard)
 
-	zerolog.ErrorHandler = func(err error) {
-		if !strings.Contains(err.Error(), "file already closed") {
-			fmt.Fprintf(os.Stderr, "zerolog: could not write event: %v\n", err)
+		// Override GRPC logging with zerolog
+		grpclog.SetLoggerV2(NewGRPCZeroLogger(&logger))
+
+		zerolog.ErrorHandler = func(err error) {
+			if !strings.Contains(err.Error(), "file already closed") {
+				fmt.Fprintf(os.Stderr, "zerolog: could not write event: %v\n", err)
+			}
 		}
-	}
+	})
 
 	return &logger, nil
 }

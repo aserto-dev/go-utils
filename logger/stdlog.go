@@ -2,6 +2,7 @@ package logger
 
 import (
 	"log"
+	"sync"
 
 	"github.com/rs/zerolog"
 )
@@ -11,6 +12,8 @@ type ZerologWriter struct {
 	logger *zerolog.Logger
 	level  zerolog.Level
 }
+
+var stdLocker = &sync.Mutex{}
 
 // NewZerologWriter creates a new ZerologWriter
 func NewZerologWriter(logger *zerolog.Logger) *ZerologWriter {
@@ -23,6 +26,9 @@ func NewZerologWriterWithLevel(logger *zerolog.Logger, level zerolog.Level) *Zer
 
 func (z *ZerologWriter) Write(p []byte) (n int, err error) {
 	msg := string(p)
+
+	stdLocker.Lock()
+	defer stdLocker.Unlock()
 
 	switch z.level {
 	case zerolog.InfoLevel:
