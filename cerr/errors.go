@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -292,6 +293,18 @@ func (e *AsertoError) Str(key, value string) *AsertoError {
 func (e *AsertoError) Int(key string, value int) *AsertoError {
 	c := e.Copy()
 	c.data[key] = fmt.Sprintf("%d", value)
+	return c
+}
+
+func (e *AsertoError) Int32(key string, value int32) *AsertoError {
+	c := e.Copy()
+	c.data[key] = strconv.FormatInt(int64(value), 10)
+	return c
+}
+
+func (e *AsertoError) Int64(key string, value int64) *AsertoError {
+	c := e.Copy()
+	c.data[key] = strconv.FormatInt(int64(value), 10)
 	return c
 }
 
