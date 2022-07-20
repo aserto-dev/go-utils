@@ -158,6 +158,8 @@ var (
 	ErrDirectoryObjectNotFound = newErr("E10066", codes.NotFound, http.StatusNotFound, "directory object not found")
 	// Returned if relation object is not found in the directory
 	ErrDirectoryRelationNotFound = newErr("E10067", codes.NotFound, http.StatusNotFound, "directory relation not found")
+	// Returned if the tenant is marked for deletion
+	ErrTenantDeleted = newErr("E10068", codes.NotFound, http.StatusNotFound, "tenant is marked for deletion")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
