@@ -11,6 +11,7 @@ import (
 // Returns an error after `timeout`.
 // It uses an exponential backoff for retries, with a min of 10ms, max of 5 seconds and a factor of 1.5.
 // Uses jitter to randomize sleep durations, to avoid contention. See more here:  github.com/jpillora/backoff
+// If the duration is set to 0, it run the given function once.
 func Retry(timeout time.Duration, f func(int) error) (err error) {
 	b := &backoff.Backoff{
 		Min:    10 * time.Millisecond,
@@ -20,6 +21,10 @@ func Retry(timeout time.Duration, f func(int) error) (err error) {
 	}
 
 	attempt := 1
+
+	if timeout == 0 {
+		return f(attempt)
+	}
 
 retryLoop:
 	for t := time.After(timeout); ; {

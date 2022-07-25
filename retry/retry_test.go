@@ -24,3 +24,31 @@ func TestRetry(t *testing.T) {
 	assert.NoError(err)
 	assert.True(worked)
 }
+
+func TestRetryOnce(t *testing.T) {
+	assert := require.New(t)
+
+	var iteration int
+	err := Retry(0, func(i int) error {
+		iteration = i
+
+		return errors.New("nope")
+	})
+
+	assert.Error(err)
+	assert.Equal(iteration, 1)
+}
+
+func TestRetryOnceNoErr(t *testing.T) {
+	assert := require.New(t)
+
+	var iteration int
+	err := Retry(0, func(i int) error {
+		iteration = i
+
+		return nil
+	})
+
+	assert.NoError(err)
+	assert.Equal(iteration, 1)
+}
