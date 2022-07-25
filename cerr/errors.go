@@ -160,6 +160,8 @@ var (
 	ErrDirectoryRelationNotFound = newErr("E10067", codes.NotFound, http.StatusNotFound, "directory relation not found")
 	// Returned if the tenant is marked for deletion
 	ErrTenantDeleted = newErr("E10068", codes.NotFound, http.StatusNotFound, "tenant is marked for deletion")
+	// Returned when tenant store for given tenant id is not found in directory.
+	ErrDirectoryStoreTenantNotFound = newErr("E10069", codes.NotFound, http.StatusNotFound, "tenant store not found")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
