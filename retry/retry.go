@@ -23,7 +23,11 @@ func Retry(timeout time.Duration, f func(int) error) (err error) {
 	attempt := 1
 
 	if timeout == 0 {
-		return f(attempt)
+		err = f(attempt)
+		if err != nil {
+			return cerr.ErrRetryTimeout.Err(err)
+		}
+		return nil
 	}
 
 retryLoop:
