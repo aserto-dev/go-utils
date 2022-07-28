@@ -17,7 +17,13 @@ type Config struct {
 
 type CallOptions struct {
 	Default   Options           `json:"default"`
+	Cache     CacheOptions      `json:"cache"`
 	Overrides []OptionOverrides `json:"overrides"`
+}
+
+type CacheOptions struct {
+	InvalidationTimeSeconds int `json:"invalidation_time_seconds"`
+	SizeMB                  int `json:"size_mb"`
 }
 
 type Options struct {
