@@ -5,25 +5,19 @@ import (
 
 	"github.com/aserto-dev/go-utils/authn/apikey"
 	"github.com/aserto-dev/go-utils/authn/auth0"
-	"github.com/aserto-dev/go-utils/grpcclient"
+	"github.com/aserto-dev/go-utils/authn/sts"
 )
 
 type Config struct {
-	APIKeys    apikey.Config     `json:"api_keys"`
-	Auth0      auth0.Config      `json:"auth0"`
-	STSService grpcclient.Config `json:"sts"`
-	Options    CallOptions       `json:"options"`
+	APIKeys    apikey.Config `json:"api_keys"`
+	Auth0      auth0.Config  `json:"auth0"`
+	STSService sts.Config    `json:"sts"`
+	Options    CallOptions   `json:"options"`
 }
 
 type CallOptions struct {
 	Default   Options           `json:"default"`
-	Cache     CacheOptions      `json:"cache"`
 	Overrides []OptionOverrides `json:"overrides"`
-}
-
-type CacheOptions struct {
-	InvalidationTimeSeconds int `json:"invalidation_time_seconds"`
-	SizeMB                  int `json:"size_mb"`
 }
 
 type Options struct {
