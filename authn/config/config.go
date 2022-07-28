@@ -5,12 +5,14 @@ import (
 
 	"github.com/aserto-dev/go-utils/authn/apikey"
 	"github.com/aserto-dev/go-utils/authn/auth0"
+	"github.com/aserto-dev/go-utils/grpcclient"
 )
 
 type Config struct {
-	APIKeys apikey.Config `json:"api_keys"`
-	Auth0   auth0.Config  `json:"auth0"`
-	Options CallOptions   `json:"options"`
+	APIKeys    apikey.Config     `json:"api_keys"`
+	Auth0      auth0.Config      `json:"auth0"`
+	STSService grpcclient.Config `json:"sts"`
+	Options    CallOptions       `json:"options"`
 }
 
 type CallOptions struct {
