@@ -34,6 +34,8 @@ type Options struct {
 	EnableDexToken bool `json:"enable_dex_token"`
 	// Allows calls without any form of authentication
 	EnableAnonymous bool `json:"enable_anonymous"`
+	// Allows calls with container identity authentication
+	EnableContainerIdentity bool `json:"enable_container_identity"`
 }
 
 type OptionOverrides struct {
