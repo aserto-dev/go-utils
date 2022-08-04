@@ -9,10 +9,11 @@ import (
 )
 
 type Config struct {
-	APIKeys    apikey.Config `json:"api_keys"`
-	Auth0      auth0.Config  `json:"auth0"`
-	STSService sts.Config    `json:"sts"`
-	Options    CallOptions   `json:"options"`
+	APIKeys           apikey.Config `json:"api_keys"`
+	Auth0             auth0.Config  `json:"auth0"`
+	STSService        sts.Config    `json:"sts"`
+	Options           CallOptions   `json:"options"`
+	AllowedIdentities []string      `json:"allowed_identities"`
 }
 
 type CallOptions struct {
@@ -35,7 +36,7 @@ type Options struct {
 	// Allows calls without any form of authentication
 	EnableAnonymous bool `json:"enable_anonymous"`
 	// Allows calls with container identity authentication
-	EnableContainerIdentity bool `json:"enable_container_identity"`
+	EnableClientIdentity bool `json:"enable_client_identity"`
 }
 
 type OptionOverrides struct {
