@@ -227,7 +227,13 @@ func (e *AsertoError) Error() string {
 			innerMessage = strings.Join([]string{innerMessage, err.Error()}, ": ")
 		}
 	}
-
+	if len(e.data) > 0 {
+		for k, v := range e.data {
+			if k == "msg" {
+				innerMessage = innerMessage + v
+			}
+		}
+	}
 	if innerMessage == "" {
 		return fmt.Sprintf("%s %s", e.Code, e.Message)
 	} else {
