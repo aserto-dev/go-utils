@@ -27,6 +27,14 @@ func ExtractTenantID(ctx context.Context) string {
 	return id
 }
 
+func ContextWithTenantID(ctx context.Context, tenantID string) context.Context {
+	return context.WithValue(ctx, HeaderAsertoTenantID, tenantID)
+}
+
+func ContextWithRequestID(ctx context.Context, requestID string) context.Context {
+	return context.WithValue(ctx, HeaderAsertoRequestID, requestID)
+}
+
 func ExtractAccountID(ctx context.Context) string {
 	id, ok := ctx.Value(HeaderAsertoAccountID).(string)
 	if !ok {
