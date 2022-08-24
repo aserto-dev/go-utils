@@ -230,6 +230,9 @@ func (e *AsertoError) Error() string {
 	if len(e.data) > 0 {
 		for k, v := range e.data {
 			if k == "msg" {
+				if innerMessage != "" {
+					innerMessage = innerMessage + ": "
+				}
 				innerMessage = innerMessage + v
 			}
 		}
@@ -274,10 +277,12 @@ func (e *AsertoError) Err(err error) *AsertoError {
 func (e *AsertoError) Msg(message string) *AsertoError {
 	c := e.Copy()
 
-	if existingMsg, ok := c.data[MessageKey]; ok {
-		c.data[MessageKey] = strings.Join([]string{existingMsg, message}, ": ")
-	} else {
-		c.data[MessageKey] = message
+	if message != "" {
+		if existingMsg, ok := c.data[MessageKey]; ok {
+			c.data[MessageKey] = strings.Join([]string{existingMsg, message}, ": ")
+		} else {
+			c.data[MessageKey] = message
+		}
 	}
 
 	return c
@@ -457,4 +462,8 @@ func Equals(err1, err2 error) bool {
 	}
 
 	return asertoErr1.Code == asertoErr2.Code
+}
+
+func CodeToAsertoError(code string) *AsertoError {
+	return asertoErrors[code]
 }
