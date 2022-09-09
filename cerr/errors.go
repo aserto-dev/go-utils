@@ -164,6 +164,8 @@ var (
 	ErrDirectoryStoreTenantNotFound = newErr("E10069", codes.NotFound, http.StatusNotFound, "tenant store not found")
 	// Returned when trying to update a resource that was changed in the meanwhile
 	ErrVersionsMismatch = newErr("E10070", codes.FailedPrecondition, http.StatusPreconditionFailed, "version hash mismatch")
+	// Returned if a tenant id is not found in the database
+	ErrTenantNotFound = newErr("E10071", codes.NotFound, http.StatusNotFound, "tenant not found")
 
 	asertoErrors = make(map[string]*AsertoError)
 )
