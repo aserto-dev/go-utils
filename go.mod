@@ -10,14 +10,11 @@ require (
 	github.com/coocood/freecache v1.2.2
 	github.com/eko/gocache/v2 v2.3.1
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/hashicorp/go-hclog v1.3.0
 	github.com/jpillora/backoff v1.0.0
 	github.com/magefile/mage v1.13.0
 	github.com/nats-io/nats.go v1.16.0
-	github.com/open-policy-agent/opa v0.44.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.28.0
-	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.0
 	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde
 	google.golang.org/genproto v0.0.0-20220902135211-223410557253
@@ -63,6 +60,7 @@ require (
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
+	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
