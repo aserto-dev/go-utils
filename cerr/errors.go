@@ -411,6 +411,9 @@ func FromGRPCStatus(grpcStatus status.Status) *AsertoError {
 		switch t := detail.(type) {
 		case *errdetails.ErrorInfo:
 			result = asertoErrors[t.Domain]
+			if result == nil {
+				return nil
+			}
 			result.data = t.Metadata
 		}
 		if result != nil {
