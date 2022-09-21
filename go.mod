@@ -3,7 +3,6 @@ module github.com/aserto-dev/go-utils
 go 1.17
 
 require (
-	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/assert v1.0.0
 	github.com/allegro/bigcache v1.2.1
 	github.com/allegro/bigcache/v3 v3.0.2
@@ -24,7 +23,6 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.0
 	github.com/tidwall/gjson v1.14.3
-	github.com/ulikunitz/xz v0.5.10
 	golang.org/x/oauth2 v0.0.0-20220822191816-0ebed06d0094
 	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde
 	google.golang.org/genproto v0.0.0-20220902135211-223410557253
@@ -79,6 +77,7 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/zricethezav/gitleaks/v8 v8.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e // indirect
