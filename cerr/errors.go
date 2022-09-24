@@ -148,20 +148,10 @@ var (
 	ErrSCCRepoNotFound = newErr("E10061", codes.NotFound, http.StatusNotFound, "source code control repository not found")
 	// Returned if a policy already has a connected repository
 	ErrPolicyRepositoryAlreadyConnected = newErr("E10062", codes.AlreadyExists, http.StatusConflict, "the policy already has a repository connected")
-	// Returned if object type is not defined in the directory
-	ErrDirectoryObjectTypeUnknown = newErr("E10063", codes.Unknown, http.StatusNotFound, "directory object type unknown")
-	// Returned if relation type is not defined in the directory
-	ErrDirectoryRelationTypeUnknown = newErr("E10064", codes.NotFound, http.StatusNotFound, "directory relation type unknown")
-	// Returned if permission is not defined in the directory
-	ErrDirectoryPermissionUnknown = newErr("E10065", codes.NotFound, http.StatusNotFound, "directory permission unknown")
 	// Returned if object object id is not found in the directory
 	ErrDirectoryObjectNotFound = newErr("E10066", codes.NotFound, http.StatusNotFound, "directory object not found")
-	// Returned if relation object is not found in the directory
-	ErrDirectoryRelationNotFound = newErr("E10067", codes.NotFound, http.StatusNotFound, "directory relation not found")
 	// Returned if the tenant is marked for deletion
 	ErrTenantDeleted = newErr("E10068", codes.NotFound, http.StatusNotFound, "tenant is marked for deletion")
-	// Returned when tenant store for given tenant id is not found in directory.
-	ErrDirectoryStoreTenantNotFound = newErr("E10069", codes.NotFound, http.StatusNotFound, "tenant store not found")
 	// Returned when trying to update a resource that was changed in the meanwhile
 	ErrVersionsMismatch = newErr("E10070", codes.FailedPrecondition, http.StatusPreconditionFailed, "version hash mismatch")
 	// Returned if a tenant id is not found in the database
@@ -177,7 +167,7 @@ func newErr(code string, statusCode codes.Code, httpCode int, msg string) *Asert
 }
 
 // AsertoError represents a well known error
-// comming from an Aserto service
+// coming from an Aserto service
 type AsertoError struct {
 	Code       string
 	StatusCode codes.Code
